@@ -1,0 +1,9 @@
+{
+  "env": {
+    "Username": "your-mongo-access-username",
+    "Password": "your-mongo-access-password",
+    "DB_Name": "db-name",
+    "ConString":"mongodb-atlas-constring"
+
+  }
+}

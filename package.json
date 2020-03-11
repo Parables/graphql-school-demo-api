@@ -1,0 +1,34 @@
+{
+  "name": "idel-sms-api",
+  "version": "1.0.0",
+  "description": "This will interact with the mongoDB Atlas backend to fetech and modify data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "restart-server": "lsof -i tcp:3090 && killall -9 node &&  npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "parables95@gmail.com"
+  },
+  "keywords": [
+    "API",
+    "IDel",
+    "SMS",
+    "MongoDB",
+    "ParaSoft"
+  ],
+  "author": "Parables Boltnoel",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.5.8",
+    "mongoose": "^5.7.12",
+    "mongoose-deep-populate": "^3.1.1",
+    "nodemon": "^2.0.1"
+  }
+}

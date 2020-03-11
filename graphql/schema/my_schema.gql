@@ -1,0 +1,232 @@
+const { buildSchema } = require("graphql");
+
+module.exports = buildSchema(`
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query{   
+    book(bookID: ID!): Book
+   allBooks: [Book]
+    relatedBooks(bookID: String!, programmeID: String!): [Book]
+    searchBook(title: String!): [Book]
+ 
+    student(studentID: ID!): [Student]
+   allStudents: [Student]
+    searchStudent(searchText: String!): [Student]
+
+     course(courseID: ID!): Course
+   allCourses: [Course]
+     relatedCourses(courseID: String!, programmeID: String!): [Book]
+     searchCourse(searchText: String!): [Course]
+
+    allProgrammes: [Programme]
+}
+
+#All mutations goes here
+type Mutation{
+
+  createBook(bookInput: BookInput): [Book]
+    updateBook(bookID: ID, bookInput: BookInput): [Book]
+    deleteBook(bookID: ID): [Book]
+
+    createStudent(studentInput: StudentInput): [Student]
+    updateStudent(studentID: ID, studentInput: StudentInput): [Student]
+    deleteStudent(studentID: ID): [Student]
+
+    createCourse(courseInput: CourseInput): [Course]
+    updateCourse(courseID: ID, courseInput: CourseInput): [Course]
+    deleteCourse(courseID: ID): [Course]
+
+
+    createProgramme(programmeInput: ProgrammeInput): [Programme]
+    updateProgramme(programmeID: ID, programmeInput: ProgrammeInput): [Programme]
+    deleteProgramme(programmeID: ID): [Programme]
+}
+
+input BookInput {
+    cover: String
+    title: String!
+    book_code: String!
+    author: String
+    inStock: Int
+}
+
+type Book {
+    _id: ID
+    cover: String
+    title: String
+    book_code: String
+    author: String
+    inStock: Int
+    createdAt: String
+    updatedAt: String
+}
+
+input CourseInput{
+    name: String!
+    course_code: String!
+    facilitators: [ID]
+    books: [ID]
+    creditHours: Int
+}
+ 
+type Course {
+    _id: ID!
+    name: String!
+    course_code: String!
+    facilitators: [Facilitator]
+    books: [Book]
+    creditHours: Int
+}
+
+
+
+ 
+input ProgrammeInput{
+   title: String!
+    programme_code: String
+    duration: String
+    startLevel: String
+    endLevel: String
+    certification: String
+    details: [ProgrammeDetailInput]
+}
+
+type Programme{
+    _id: ID
+    title: String
+    programme_code: String
+    duration: String
+    startLevel: String
+    endLevel: String
+    certification: String
+    details: [ProgrammeDetail]
+}
+
+input  ProgrammeDetailInput{
+     level: String 
+     semesters: [SemesterInput]
+}
+
+"Adds levels, with semesters and courses for the Progrmamme"
+type  ProgrammeDetail{
+    """
+    The levels for the duration of the Programme.
+    A 4year Programme will have about 4 levels( 100, 200, 300 & 400)
+    """
+     level: Int 
+
+     "For each level, there are about 2 Semesters"
+     semesters: [Semester]
+}
+
+"Contains the details of a Semester"
+type Semester {
+    "Either the 1st or 2nd Semester"
+    session: Int
+    "The courses for that session"
+    courses: [Course]
+}
+"Imputs the details of a Semester"
+input SemesterInput {
+    "Either the 1st or 2nd Semester"
+    session: Int
+    "The courses for that session"
+    courses: [ID]
+}
+
+input ContactInput{
+    phone_numbers: [String]
+    email: [String]
+    address:[String]
+}
+
+type Contact  {
+    phoneNumbers: [String]
+    emails: [String]
+    addresses:[String]
+}
+
+interface Person {
+    _id: ID!
+    avartar: String
+    surname: String!
+    otherNames: String!
+    dob: String
+    gender: String
+    contact: Contact
+    qualification: [String]
+}
+
+input StudentInput{
+avartar: String
+   applicationID: String
+    exams_number: String
+  surname: String
+    otherNames: String
+    dob: String
+    gender: String
+    nationality: String 
+    contact: ContactInput
+    qualification: [String]
+    entrylevel: String
+    currentlevel: String
+    programme: ID
+    booksGiven: [BooksGivenInput]
+   }
+
+
+type Student implements Person {
+    _id: ID!
+    avartar: String
+   applicationID: String
+    exams_number: String
+    surname: String!
+    otherNames: String!
+    dob: String!
+    gender: String!
+    contact: Contact
+    qualification: [String]
+    entrylevel: Int!
+    currentlevel: Int!
+    programme: Programme
+    booksGiven: [BooksGiven]
+    createdAt: String!
+    updatedAt: String!
+}
+
+input BooksGivenInput{
+    level: String
+    books: [ID]
+}
+
+
+type BooksGiven{
+    level: String
+    books: [Book]
+}
+
+type Facilitator implements Person {
+    _id: ID!
+    avartar: String
+    surname: String!
+    otherNames: String!
+    dob: String
+    gender: String
+    contact: Contact
+    qualification: [String]
+    courses: [Course]
+
+}
+
+
+# Information for paginating this connection
+type PageInfo {
+    startCursor: ID
+    endCursor: ID
+    hasNextPage: Boolean!
+}
+
+`);
